@@ -1,22 +1,26 @@
-library(httr)
-library(jsonlite)
-library(magrittr)
+require(httr)
+require(jsonlite)
+require(magrittr)
 
-callTessi <- function(endpoint, credentials, request_type = "GET", method, data){
+callTessi <- function(endpoint, credentials, request_type = "GET", method, data, flatten=TRUE){
 
   url <- paste0(endpoint, method)
 
   result <- list()
 
+  auth <- if(typeof(credentials) == "list") {
+    authenticate(credentials["user"], credentials["pass"])
+  } else {
+    NULL
+  }
+
   if(request_type == "GET"){
 
-    result <- GET(
+    result <- httr::GET(
       url,
-      authenticate(credentials["user"], credentials["pass"]),
+      auth,
       content_type_json()
-      ) %>%
-      content("text") %>%
-      fromJSON(flatten=TRUE)
+      )
 
   } else if(request_type == "POST") {
 
@@ -25,18 +29,28 @@ callTessi <- function(endpoint, credentials, request_type = "GET", method, data)
     tryCatch({
     result <- POST(
       url,
-      authenticate(credentials["user"], credentials["pass"]),
+      auth,
       encode = "json",
       body=data
     )}, warning = function(war) {
         print(paste("Warning: ", war))
+    }, error = function(err) {
+        print(paste("Error: ", err))
       }
-    , ("Error retrieving data"))
+    )
 
-  } else if(request_type == "PUT"){
+  } else if(request_type %in% c("PUT", "DELETE")){
+    return(print("This type of request is not yet supported."))
+  } else {
+    stop(print("There was a problem with your request type."))
+  }
 
-  } else if(request_type == "DELETE"){
-
+  if(flatten == TRUE){
+    return(
+      result %>%
+      content("text") %>%
+      fromJSON(flatten=TRUE)
+    )
   }
 
   return(result)
