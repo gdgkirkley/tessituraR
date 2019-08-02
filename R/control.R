@@ -2,24 +2,17 @@ require(httr)
 require(jsonlite)
 require(magrittr)
 
-callTessi <- function(endpoint, credentials, request_type = "GET", method, data, flatten=TRUE){
+callTessi <- function(host, basePath, method, credentials, request_type = "GET", data, flatten=TRUE){
 
-  url <- paste0(endpoint, method)
+  url <- paste0(host, basePath, method)
 
   result <- list()
-
-  auth <- if(typeof(credentials) == "list") {
-    authenticate(credentials["user"], credentials["pass"])
-  } else {
-    NULL
-  }
 
   if(request_type == "GET"){
 
     result <- httr::GET(
       url,
-      auth,
-      content_type_json()
+      add_headers(.headers = c('Authorization' = credentials))
       )
 
   } else if(request_type == "POST") {
@@ -40,9 +33,17 @@ callTessi <- function(endpoint, credentials, request_type = "GET", method, data,
     )
 
   } else if(request_type %in% c("PUT", "DELETE")){
-    return(print("This type of request is not yet supported."))
+    stop("This type of request is not yet supported.")
   } else {
-    stop(print("There was a problem with your request type."))
+    stop("There was a problem with your request type.")
+  }
+
+  if(status_code(result) != 200){
+    stop(
+      message("Your request returned status ", status_code(result)),
+      message("For more information, visit http://en.wikipedia.org/wiki/Http_error_codes"),
+      message("The message from the server was ", content(result))
+      )
   }
 
   if(flatten == TRUE){
@@ -55,3 +56,13 @@ callTessi <- function(endpoint, credentials, request_type = "GET", method, data,
 
   return(result)
 }
+
+createCredentials <- function(username, usergroup, location, password) {
+  cred <- paste0(
+      "Basic ", jsonlite::base64_enc(
+        paste(username, usergroup, location, password, sep=":")
+      )
+    )
+  return(cred)
+}
+

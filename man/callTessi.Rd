@@ -1,11 +1,11 @@
 \name{callTessi}
 \alias{callTessi}
-\title{Send a Request to Tessitura}
+\title{Send a Request to the Tessitura API}
 \usage{
-callTessi(endpoint, credentials, request_type="GET", method, data, flatten=TRUE)
+callTessi(host, basePath, method, credentials, request_type="GET", data, flatten=TRUE)
 }
 \description{
-Send GET or POST requests to Tessitura. Function will return either a flattened dataframe or a list of the response. Credentials should be supplied as a list object with user and password elements. It is recommended to pass these via environment variables.
+Send GET or POST requests to Tessitura. Function will return either a flattened dataframe or a list of the response. Credentials should be a base64 encoded string using createCredentials().
 }
 \examples{
 callTessi()
