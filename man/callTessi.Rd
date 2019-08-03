@@ -4,26 +4,26 @@
 \alias{callTessi}
 \title{Send a Request to the Tessitura API}
 \usage{
-callTessi(host, basePath, method, credentials, request_type = "GET",
+callTessi(host, basePath, resource, credentials, request_type = "GET",
   data, flatten = TRUE)
 }
 \arguments{
-\item{host}{character}
+\item{host}{The host name for your Tessitura API}
 
-\item{basePath}{character}
+\item{basePath}{The base path for your Tessitura API. eg., TessituraService}
 
-\item{method}{character}
+\item{resource}{The resource to be request from the API. eg., Diagnostics/Status}
 
-\item{credentials}{character}
+\item{credentials}{A base64 encoded character string. Can be created with createCredentials()}
 
-\item{request_type}{character}
+\item{request_type}{An http verb. Currently on GET and POST are supported}
 
-\item{data}{list}
+\item{data}{The data object for POST.}
 
-\item{flatten}{logical}
+\item{flatten}{If true, a data frame will be returned of the results. If false, the result object will be returned.}
 }
 \value{
-list
+A data frame or list of the result
 }
 \description{
 Send a Request to the Tessitura API

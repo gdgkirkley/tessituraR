@@ -7,16 +7,16 @@
 createCredentials(username, usergroup, location, password)
 }
 \arguments{
-\item{username}{character}
+\item{username}{Your Tessitura user name}
 
-\item{usergroup}{character}
+\item{usergroup}{Your Tessitura user group}
 
-\item{location}{character}
+\item{location}{Your Tessitura machine location}
 
-\item{password}{character}
+\item{password}{Your Tessitura password}
 }
 \value{
-character
+A base64 encoded character string for authorization
 }
 \description{
 Create Tessitura API Credentials

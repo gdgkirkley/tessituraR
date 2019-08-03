@@ -4,23 +4,23 @@ require(magrittr)
 
 #' Send a Request to the Tessitura API
 #'
-#' @param host character
-#' @param basePath character
-#' @param method character
-#' @param credentials character
-#' @param request_type character
-#' @param data list
-#' @param flatten logical
+#' @param host The host name for your Tessitura API
+#' @param basePath The base path for your Tessitura API. eg., TessituraService
+#' @param resource The resource to be request from the API. eg., Diagnostics/Status
+#' @param credentials A base64 encoded character string. Can be created with createCredentials()
+#' @param request_type An http verb. Currently on GET and POST are supported
+#' @param data The data object for POST.
+#' @param flatten If true, a data frame will be returned of the results. If false, the result object will be returned.
 #'
-#' @return list
+#' @return A data frame or list of the result
 #' @export
 #'
 #' @examples
 #'#' callTessi('mytessi.tessituranetwork.com/', 'TessituraService', '/Diagnostics/Status', 'mybase64credentials')
 
-callTessi <- function(host, basePath, method, credentials, request_type = "GET", data, flatten=TRUE){
+callTessi <- function(host, basePath, resource, credentials, request_type = "GET", data, flatten=TRUE){
 
-  url <- paste0(host, basePath, method)
+  url <- paste0(host, basePath, resource)
 
   result <- list()
 
@@ -33,8 +33,8 @@ callTessi <- function(host, basePath, method, credentials, request_type = "GET",
 
   } else if(request_type == "POST") {
 
-    if(typeof(data) != "list"){stop()}
-  # Continue working on the try catch aspect of this function
+    if(typeof(data) != "list"){stop("Data must be a data frame")}
+
     tryCatch({
     result <- httr::POST(
       url,
@@ -56,18 +56,31 @@ callTessi <- function(host, basePath, method, credentials, request_type = "GET",
 
   if(httr::status_code(result) != 200){
     stop(
-      message("Your request returned status ", httr::status_code(result)),
-      message("For more information, visit http://en.wikipedia.org/wiki/Http_error_codes"),
-      message("The message from the server was ", httr::content(result))
+     writeLines(
+       paste0("Your request returned status ", httr::status_code(result), "\n",
+      "For more information, visit http://en.wikipedia.org/wiki/Http_error_codes\n",
+      "The message from the server was '", strtrim(httr::content(result), 100), "'"
+          )
+        )
       )
   }
 
   if(flatten == TRUE){
-    return(
-      result %>%
+
+    flatResult <- result %>%
       httr::content("text") %>%
       jsonlite::fromJSON(flatten=TRUE)
-    )
+
+    if(inherits(flatResult, "data.frame")){
+      return(flatResult)
+    } else {
+      return(
+         purrr::map_dfr(
+           unlist(flatResult),
+           extract
+           )
+        )
+    }
   }
 
   return(result)
@@ -75,12 +88,12 @@ callTessi <- function(host, basePath, method, credentials, request_type = "GET",
 
 #' Create Tessitura API Credentials
 #'
-#' @param username character
-#' @param usergroup character
-#' @param location character
-#' @param password character
+#' @param username Your Tessitura user name
+#' @param usergroup Your Tessitura user group
+#' @param location Your Tessitura machine location
+#' @param password Your Tessitura password
 #'
-#' @return character
+#' @return A base64 encoded character string for authorization
 #' @export
 #'
 #' @examples
