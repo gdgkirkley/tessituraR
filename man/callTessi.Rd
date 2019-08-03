@@ -29,5 +29,9 @@ A data frame or list of the result
 Send a Request to the Tessitura API
 }
 \examples{
-#' callTessi('mytessi.tessituranetwork.com/', 'TessituraService', '/Diagnostics/Status', 'mybase64credentials')
+host <- 'mytessi.tessituranetwork.com/'
+basePath <- 'TessituraService'
+resource <- '/Diagnostics/Status'
+credentials <- 'mybase64credentials'
+#' callTessi(host, basePath, resource, credentials)
 }

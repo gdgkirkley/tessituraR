@@ -16,7 +16,11 @@ require(magrittr)
 #' @export
 #'
 #' @examples
-#'#' callTessi('mytessi.tessituranetwork.com/', 'TessituraService', '/Diagnostics/Status', 'mybase64credentials')
+#'host <- 'mytessi.tessituranetwork.com/'
+#'basePath <- 'TessituraService'
+#'resource <- '/Diagnostics/Status'
+#'credentials <- 'mybase64credentials'
+#'#' callTessi(host, basePath, resource, credentials)
 
 callTessi <- function(host, basePath, resource, credentials, request_type = "GET", data, flatten=TRUE){
 
@@ -77,7 +81,7 @@ callTessi <- function(host, basePath, resource, credentials, request_type = "GET
       return(
          purrr::map_dfr(
            unlist(flatResult),
-           extract
+           magrittr::extract
            )
         )
     }

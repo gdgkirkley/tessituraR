@@ -1,0 +1,56 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# tessituraR
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Interacting with and manipulating data from the Tessitura Service API. Inspired by Micah Walter's [tessitura-tools for Python](https://github.com/micahwalter/tessitura-tools).
+
+## Installation
+
+You can install the released version of tessituraR from [CRAN](https://CRAN.R-project.org) with:
+
+``` {r, eval=FALSE}
+install.packages("tessituraR")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` {r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("gdgkirkley/tessituraR")
+```
+
+## Example
+
+This is a basic example of usage:
+
+```{r example, eval=FALSE}
+library(tessituraR)
+
+host <- "http://mytessi.tessituranetwork.com/"
+basePath <- "TessituraService"
+resource <- "/TXN/ModesofSale"
+
+# Keep your credentials in environment variables!
+credentials <- createCredentials("creif", "admin", "MET95", "impresario")
+
+# Request is a GET by default. Change flatten to FALSE if you want the entire JSON object back.
+modesOfSale <- callTessi(host, basePath, resource, credentials)
+
+```
+
+
