@@ -10,13 +10,7 @@ Interacting with and manipulating data from the Tessitura Service API. Inspired 
 Installation
 ------------
 
-You can install the released version of tessituraR from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("tessituraR")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+Hopefully this package will be up on CRAN soon. Until then you can install the development version with:
 
 ``` r
 # install.packages("devtools")
