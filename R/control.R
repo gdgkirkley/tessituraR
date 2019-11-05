@@ -1,6 +1,7 @@
 require(httr)
 require(jsonlite)
 require(magrittr)
+require(stringr)
 
 #' Send a Request to the Tessitura API
 #'
@@ -38,6 +39,13 @@ callTessi <- function(host, basePath, resource, credentials, request_type = "GET
   } else if(request_type == "POST") {
 
     if(typeof(data) != "list"){stop("Data must be a data frame")}
+
+    topLevelNames <- list()
+    for(column in data){
+      if(stringr::str_detect(names(data), ".")){
+
+      }
+    }
 
     tryCatch({
     result <- httr::POST(
@@ -88,6 +96,68 @@ callTessi <- function(host, basePath, resource, credentials, request_type = "GET
   }
 
   return(result)
+}
+
+
+#' @title  Format a Tessitura Post Request
+#'
+#' @description Since Tessitura requires nested JSON requests in most routes, this function
+#' will transform a data frame containing columns with names separated by a point
+#' into a nested list or JSON string. Each column should be named like "Keyword.Category.Id"
+#' as the function will nest at each subsequent . character.
+#'
+#' @param data A data frame to transform
+#' @param returnJSON Return data in JSON or list format. Default is JSON.
+#'
+#' @return A nested JSON string for POST requests to the Tessitura API
+#' @export
+#'
+#' @examples
+#' data <- tribble(
+#'     ~Keyword.Description, ~Keyword.Id, ~Keyword.Category.Id, ~Constituent.Id, ~Id, ~Value,
+#'     "sample string 1", 2, 1, 1, 1, "sample string 3"
+#' )
+#' formattedRequest <- formatTessiPostRequest(data)
+#'
+formatTessiPostRequest <- function(data, returnJSON = TRUE) {
+
+  splitColumnNames <- strsplit(names(data), "[.]")
+
+  nestedData <- list()
+
+  # This should be updated to work recursively for each level
+  for(name in names(data)){
+
+    splitColumnName <- unlist(strsplit(name, "[.]"))
+
+    if(length(splitColumnName) > 1){
+
+      for(level in splitColumnName){
+
+        innerList <- list()
+
+        if((which(level == splitColumnName) == 1))
+        {
+            next
+        }
+        else
+        {
+          innerList[[level]] <- data[[name]]
+          nestedData[[splitColumnName[1]]] <- innerList
+        }
+      }
+    }
+    else
+    {
+      nestedData[[name]] <- data2[[name]]
+    }
+  }
+
+  if(returnJSON){
+    return(jsonlite::toJSON(nestedData, pretty=TRUE))
+  } else {
+    return(nestedData)
+  }
 }
 
 #' Create Tessitura API Credentials

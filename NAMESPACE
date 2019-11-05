@@ -3,4 +3,5 @@
 export("%>%")
 export(callTessi)
 export(createCredentials)
+export(formatTessiPostRequest)
 importFrom(magrittr,"%>%")
