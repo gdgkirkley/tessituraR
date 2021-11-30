@@ -3,7 +3,6 @@
 \docType{package}
 \name{tessituraR}
 \alias{tessituraR}
-\alias{tessituraR-package}
 \title{tessituraR: Interacting With the Tessitura API}
 \description{
 A package to help you work with the Tessitura API. At the moment,

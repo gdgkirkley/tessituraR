@@ -2,10 +2,17 @@
 % Please edit documentation in R/control.R
 \name{callTessi}
 \alias{callTessi}
-\title{Send a Request to the Tessitura API}
+\title{Send a Request to the Tessitura API - Deprecated}
 \usage{
-callTessi(host, basePath, resource, credentials, request_type = "GET",
-  data, flatten = TRUE)
+callTessi(
+  host,
+  basePath,
+  resource,
+  credentials,
+  request_type = "GET",
+  data,
+  flatten = TRUE
+)
 }
 \arguments{
 \item{host}{The host name for your Tessitura API}
@@ -26,7 +33,7 @@ callTessi(host, basePath, resource, credentials, request_type = "GET",
 A data frame or list of the result
 }
 \description{
-Send a Request to the Tessitura API
+Send a Request to the Tessitura API - Deprecated
 }
 \examples{
 host <- 'mytessi.tessituranetwork.com/'
