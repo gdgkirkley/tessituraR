@@ -30,6 +30,7 @@ TessituraService <- R6::R6Class(
     defaultHeaders = NULL,
     timeout = NULL,
     maxRetryAttempts = NULL,
+    userAgent = "TessituraUser/1.0.0/r",
 
     #' @description Constructor
     #'
@@ -39,7 +40,7 @@ TessituraService <- R6::R6Class(
     #' @param timeout The maximum timeout for a request. Defaults to 5000.
     #' @param maxRetryAttempts The maximum number of times to retry a request before failing. Defaults to 3.
     #'
-    initialize = function(tessituraUrl, credentials, defaultHeaders = NULL, timeout = 5000, maxRetryAttempts = 3) {
+    initialize = function(tessituraUrl, credentials, defaultHeaders = NULL, userAgent = NULL, timeout = 5000, maxRetryAttempts = 3) {
       if(!is.null(tessituraUrl)) {
         self$tessituraUrl <- tessituraUrl
       }
@@ -50,6 +51,10 @@ TessituraService <- R6::R6Class(
 
       if(!is.null(defaultHeaders)) {
         self$defaultHeaders <- defaultHeaders
+      }
+
+      if(!is.null(userAgent)) {
+        self$userAgent <- userAgent
       }
 
       if (!is.null(timeout)) {
@@ -107,15 +112,15 @@ TessituraService <- R6::R6Class(
       headers = httr::add_headers(c(headerParams, self$defaultHeaders))
 
       if (method == "GET") {
-        httr::GET(url, query = queryParams, headers, self$timeout, ...)
+        httr::GET(url, query = queryParams, headers, self$timeout, httr::user_agent(self$userAgent), ...)
       } else if (method == "POST") {
         httr::POST(url, query = queryParams, headers, body = body,
-                   httr::content_type("application/json"), ....)
+                   httr::content_type("application/json"), self$timeout, httr::user_agent(self$userAgent), ....)
       } else if (method == "PUT") {
         httr::PUT(url, query = queryParams, headers, body = body,
-                   httr::content_type("application/json"), ....)
+                   httr::content_type("application/json"), self$timeout, httr::user_agent(self$userAgent), ....)
       } else if (method == "DELETE") {
-        httr::DELETE(url, query = queryParams, headers, self$timeout, ...)
+        httr::DELETE(url, query = queryParams, headers, self$timeout, httr::user_agent(self$userAgent), ...)
       } else {
         error <- "HTTP Method must be GET, POST, PUT or DELETE"
         stop(error)
