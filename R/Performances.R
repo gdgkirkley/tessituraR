@@ -43,7 +43,8 @@ Performances <- R6::R6Class(
     UpdatedBy = NULL,
     UpdatedDateTime = NULL,
     ZoneMap = NULL,
-    initialize = function(AvailSaleIndicator = NULL,
+
+    initialize <- function(AvailSaleIndicator = NULL,
                           BestSeatMap = NULL,
                           BudgetAmount = NULL,
                           Campaign = NULL,
