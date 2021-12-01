@@ -39,6 +39,7 @@ TessituraService <- R6::R6Class(
     #' @param defaultHeaders Default headers for all requests
     #' @param timeout The maximum timeout for a request. Defaults to 5000.
     #' @param maxRetryAttempts The maximum number of times to retry a request before failing. Defaults to 3.
+    #' @param userAgent The user agent to use in requests
     #'
     initialize = function(tessituraUrl, credentials, defaultHeaders = NULL, userAgent = NULL, timeout = 5000, maxRetryAttempts = 3) {
       if(!is.null(tessituraUrl)) {
@@ -116,15 +117,19 @@ TessituraService <- R6::R6Class(
       path = paste0(self$tessituraUrl, url)
 
       if (method == "GET") {
-        httr::GET(path, query = queryParams, headers, httr::timeout(self$timeout), httr::user_agent(self$`userAgent`), ...)
+        httr::GET(path, query = queryParams, headers, httr::timeout(self$timeout),
+                  httr::user_agent(self$`userAgent`), ...)
       } else if (method == "POST") {
         httr::POST(path, query = queryParams, headers, body = body,
-                   httr::content_type("application/json"), httr::timeout(self$timeout), httr::user_agent(self$`userAgent`), ....)
+                   httr::content_type("application/json"), httr::timeout(self$timeout),
+                   httr::user_agent(self$`userAgent`), ....)
       } else if (method == "PUT") {
         httr::PUT(path, query = queryParams, headers, body = body,
-                   httr::content_type("application/json"), httr::timeout(self$timeout), httr::user_agent(self$`userAgent`), ....)
+                   httr::content_type("application/json"), httr::timeout(self$timeout),
+                  httr::user_agent(self$`userAgent`), ....)
       } else if (method == "DELETE") {
-        httr::DELETE(path, query = queryParams, headers, httr::timeout(self$timeout), httr::user_agent(self$`userAgent`), ...)
+        httr::DELETE(path, query = queryParams, headers, httr::timeout(self$timeout),
+                     httr::user_agent(self$`userAgent`), ...)
       } else {
         error <- "HTTP Method must be GET, POST, PUT or DELETE"
         stop(error)
