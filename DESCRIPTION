@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Gabriel Kirkley
 Maintainer: Gabriel Kirkley <gkirkley@artsclub.com>
 Description: Tools for interacting with and manipulating data from Tessitura API.
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
