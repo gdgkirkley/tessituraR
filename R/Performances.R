@@ -44,7 +44,7 @@ Performances <- R6::R6Class(
     UpdatedDateTime = NULL,
     ZoneMap = NULL,
 
-    initialize <- function(AvailSaleIndicator = NULL,
+    initialize = function(AvailSaleIndicator = NULL,
                           BestSeatMap = NULL,
                           BudgetAmount = NULL,
                           Campaign = NULL,
@@ -240,7 +240,7 @@ Performances <- R6::R6Class(
       }
     },
 
-    toJSON <- function() {
+    toJSON = function() {
       PerformanceObject <- list()
       if (!is.null(self$AvailSaleIndicator)) {
         PerformanceObject[['AvailSaleIndicator']] <- AvailSaleIndicator
