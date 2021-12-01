@@ -109,7 +109,9 @@ TessituraService <- R6::R6Class(
     #' @param ... Any other parameters for the httr methods
     #'
     Execute = function(url, method, queryParams, headerParams, body, ...) {
-      headers = httr::add_headers(c(headerParams, self$defaultHeaders))
+      headers = httr::add_headers(
+        c(headerParams, self$defaultHeaders, Authorization = self$credentials)
+        )
 
       path = paste0(self$tessituraUrl, url)
 
