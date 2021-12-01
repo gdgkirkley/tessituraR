@@ -81,7 +81,7 @@ Performances <- R6::R6Class(
                           Type = NULL,
                           UpdatedBy = NULL,
                           UpdatedDateTime = NULL,
-                          ZoneMap = NULL,) {
+                          ZoneMap = NULL) {
       if (!is.null(AvailSaleIndicator)) {
         self$AvailSaleIndicator <- AvailSaleIndicator
       }
