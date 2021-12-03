@@ -200,8 +200,29 @@ TessituraService <- R6::R6Class(
         returnObj <- obj
       }
       returnObj
+    },
+    #' @description Flatten and unwrap a response to a data frame
+    #'
+    #' @param response The HTTP response object
+    #' @returns A flattened result data frame
+    #'
+    flattenResponse = function(response) {
+      flatResult <- response %>%
+        httr::content("text") %>%
+        jsonlite::fromJSON(flatten=TRUE)
+
+      if(inherits(flatResult, "data.frame")){
+        return(flatResult)
+      } else {
+        return(
+          purrr::map_dfr(
+            unlist(flatResult),
+            magrittr::extract
+          )
+        )
+      }
     }
-  ),
+  )
 )
 
 #' Create a new Tessitura Service object
